@@ -1,21 +1,5 @@
-# requirements.txt - ARREGLADO para Python 3.13 en Render.com
 Flask==3.0.0
 requests==2.31.0
+Pillow==10.1.0
+openai==1.12.0
 gunicorn==21.2.0
-
-# Pillow compatible con Python 3.13
-Pillow==10.4.0
-
-# Google Generative AI compatible
-google-generativeai==0.8.3
-
-# Dependencias básicas compatibles
-Werkzeug==3.0.1
-itsdangerous==2.1.2
-Jinja2==3.1.3
-MarkupSafe==2.1.5
-click==8.1.7
-
-# Opcional: si falla, remover estas líneas
-beautifulsoup4==4.12.3
-fake-useragent==1.5.1
