@@ -640,7 +640,7 @@ def auth_login():
     else:
         flash(result['message'], 'danger')
         print(f"Failed login for {email}")
-       return redirect(url_for('auth_login_page'))
+        return redirect(url_for('auth_login_page'))
 
 @app.route('/auth/logout')
 def auth_logout():
@@ -1040,3 +1040,4 @@ else:
    import logging
    logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
    logging.getLogger('werkzeug').setLevel(logging.WARNING)
+
