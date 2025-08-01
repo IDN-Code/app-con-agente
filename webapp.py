@@ -16,19 +16,19 @@ from functools import wraps
 try:
     from PIL import Image
     PIL_AVAILABLE = True
-    print("✅ PIL (Pillow) disponible para procesamiento de imagen")
+    print("PIL (Pillow) disponible para procesamiento de imagen")
 except ImportError:
     PIL_AVAILABLE = False
-    print("⚠️ PIL (Pillow) no disponible - búsqueda por imagen limitada")
+    print("PIL (Pillow) no disponible - busqueda por imagen limitada")
 
 try:
     import openai
     OPENAI_AVAILABLE = True
-    print("✅ OpenAI disponible")
+    print("OpenAI disponible")
 except ImportError:
     openai = None
     OPENAI_AVAILABLE = False
-    print("⚠️ OpenAI no disponible - instalar con: pip install openai")
+    print("OpenAI no disponible - instalar con: pip install openai")
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'fallback-key-change-in-production')
@@ -42,16 +42,16 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 if OPENAI_AVAILABLE and OPENAI_API_KEY:
     try:
         openai.api_key = OPENAI_API_KEY
-        print("✅ API de OpenAI configurada correctamente")
+        print("API de OpenAI configurada correctamente")
         OPENAI_READY = True
     except Exception as e:
-        print(f"❌ Error configurando OpenAI: {e}")
+        print(f"Error configurando OpenAI: {e}")
         OPENAI_READY = False
 elif OPENAI_AVAILABLE and not OPENAI_API_KEY:
-    print("⚠️ OpenAI disponible pero falta OPENAI_API_KEY en variables de entorno")
+    print("OpenAI disponible pero falta OPENAI_API_KEY en variables de entorno")
     OPENAI_READY = False
 else:
-    print("⚠️ OpenAI no está disponible - funcionalidades limitadas")
+    print("OpenAI no esta disponible - funcionalidades limitadas")
     OPENAI_READY = False
 
 # Firebase Auth Class (sin cambios)
@@ -158,9 +158,9 @@ class OpenAIAgent:
     
     def __init__(self):
         if not OPENAI_READY:
-            print("❌ OpenAI Agent no disponible")
+            print("OpenAI Agent no disponible")
         else:
-            print("✅ OpenAI Agent inicializado")
+            print("OpenAI Agent inicializado")
     
     def encode_image(self, image_content):
         """Codifica imagen a base64 para OpenAI Vision"""
@@ -169,13 +169,13 @@ class OpenAIAgent:
         try:
             return base64.b64encode(image_content).decode('utf-8')
         except Exception as e:
-            print(f"❌ Error codificando imagen: {e}")
+            print(f"Error codificando imagen: {e}")
             return None
     
     def analyze_image_with_vision(self, image_content):
         """Analiza imagen con OpenAI Vision para generar consulta de búsqueda"""
         if not OPENAI_READY or not image_content:
-            print("❌ OpenAI no disponible para análisis de imagen")
+            print("OpenAI no disponible para analisis de imagen")
             return None
         
         try:
@@ -183,7 +183,7 @@ class OpenAIAgent:
             if not base64_image:
                 return None
             
-            print("🖼️ Analizando imagen con OpenAI Vision...")
+            print("Analizando imagen con OpenAI Vision...")
             
             response = openai.chat.completions.create(
                 model="gpt-4o",  # Modelo con capacidades de visión
@@ -227,23 +227,23 @@ class OpenAIAgent:
             
             if response.choices and response.choices[0].message.content:
                 search_query = response.choices[0].message.content.strip()
-                print(f"🧠 Consulta generada desde imagen: '{search_query}'")
+                print(f"Consulta generada desde imagen: '{search_query}'")
                 return search_query
             
             return None
             
         except Exception as e:
-            print(f"❌ Error analizando imagen con OpenAI: {e}")
+            print(f"Error analizando imagen con OpenAI: {e}")
             return None
     
     def search_products_with_agent(self, query):
         """Usa OpenAI Agent mode para buscar productos con web browsing"""
         if not OPENAI_READY or not query:
-            print("❌ OpenAI Agent no disponible para búsqueda")
+            print("OpenAI Agent no disponible para busqueda")
             return []
         
         try:
-            print(f"🔍 Buscando productos con OpenAI Agent: '{query}'")
+            print(f"Buscando productos con OpenAI Agent: '{query}'")
             
             response = openai.chat.completions.create(
                 model="gpt-4o",
@@ -303,18 +303,18 @@ class OpenAIAgent:
                         if self._validate_product(product):
                             valid_products.append(product)
                     
-                    print(f"✅ OpenAI Agent encontró {len(valid_products)} productos válidos")
+                    print(f"OpenAI Agent encontro {len(valid_products)} productos validos")✅ OpenAI Agent encontró {len(valid_products)} productos válidos")
                     return valid_products
                     
                 except json.JSONDecodeError as e:
-                    print(f"❌ Error parseando JSON de OpenAI: {e}")
+                    print(f"Error parseando JSON de OpenAI: {e}")
                     print(f"Contenido recibido: {content[:200]}...")
                     return []
             
             return []
             
         except Exception as e:
-            print(f"❌ Error en búsqueda con OpenAI Agent: {e}")
+            print(f"Error en busqueda con OpenAI Agent: {e}")
             return []
     
     def _validate_product(self, product):
@@ -734,28 +734,28 @@ def search_page():
         <form id="searchForm" enctype="multipart/form-data">
             <div class="search-bar">
                 <input type="text" id="searchQuery" name="query" placeholder="Busca cualquier producto...">
-                <button type="submit">🔍 Buscar</button>
+                <button type="submit">Buscar</button>
             </div>
             
             ''' + ('<div class="or-divider"><span>O usa inteligencia artificial</span></div>' if image_search_available else '') + '''
             
-            ''' + ('<div class="image-upload" id="imageUpload"><input type="file" id="imageFile" name="image_file" accept="image/*"><label for="imageFile">🤖 Subir imagen para análisis con IA<br><small>JPG, PNG, GIF hasta 10MB - OpenAI Vision</small></label><img id="imagePreview" class="image-preview" src="#" alt="Vista previa"></div>' if image_search_available else '') + '''
+            ''' + ('<div class="image-upload" id="imageUpload"><input type="file" id="imageFile" name="image_file" accept="image/*"><label for="imageFile">Subir imagen para analisis con IA<br><small>JPG, PNG, GIF hasta 10MB - OpenAI Vision</small></label><img id="imagePreview" class="image-preview" src="#" alt="Vista previa"></div>' if image_search_available else '') + '''
         </form>
         
         <div class="tips">
-            <h4>🚀 Sistema con Inteligencia Artificial''' + (' + Visión por Computadora:' if image_search_available else ':') + '''</h4>
+            <h4>Sistema con Inteligencia Artificial''' + (' + Vision por Computadora:' if image_search_available else ':') + '''</h4>
             <ul style="margin: 8px 0 0 15px; font-size: 13px;">
-                <li><strong>🤖 OpenAI Agent:</strong> Búsqueda inteligente con navegación web</li>
-                <li><strong>🇺🇸 Tiendas USA:</strong> Amazon, Walmart, Target, Best Buy, Home Depot</li>
-                <li><strong>🚫 Sin basura:</strong> Filtrado automático de Alibaba, Temu, AliExpress</li>
-                ''' + ('<li><strong>👁️ IA Vision:</strong> Identifica productos en imágenes automáticamente</li>' if image_search_available else '<li><strong>⚠️ Imagen:</strong> Configura OPENAI_API_KEY para activar vision</li>') + '''
-                <li><strong>⚡ Velocidad:</strong> Resultados inteligentes en tiempo real</li>
+                <li><strong>OpenAI Agent:</strong> Busqueda inteligente con navegacion web</li>
+                <li><strong>Tiendas USA:</strong> Amazon, Walmart, Target, Best Buy, Home Depot</li>
+                <li><strong>Sin basura:</strong> Filtrado automatico de Alibaba, Temu, AliExpress</li>
+                ''' + ('<li><strong>IA Vision:</strong> Identifica productos en imagenes automaticamente</li>' if image_search_available else '<li><strong>Imagen:</strong> Configura OPENAI_API_KEY para activar vision</li>') + '''
+                <li><strong>Velocidad:</strong> Resultados inteligentes en tiempo real</li>
             </ul>
         </div>
         
         <div id="loading" class="loading">
             <div class="spinner"></div>
-            <h3>🤖 IA buscando productos...</h3>
+            <h3>IA buscando productos...</h3>
             <p id="loadingText">OpenAI Agent trabajando...</p>
         </div>
         <div id="error" class="error"></div>
@@ -804,9 +804,9 @@ def search_page():
             
             searching = true;
             if (imageFile) {
-                showLoading('🤖 OpenAI analizando imagen...');
+                showLoading('OpenAI analizando imagen...');
             } else {
-                showLoading('🔍 OpenAI Agent buscando...');
+                showLoading('OpenAI Agent buscando...');
             }
             
             const timeoutId = setTimeout(() => { 
@@ -844,7 +844,7 @@ def search_page():
             });
         });
         
-        function showLoading(text = '🤖 IA trabajando...') { 
+        function showLoading(text = 'IA trabajando...') { 
             document.getElementById('loadingText').textContent = text;
             document.getElementById('loading').style.display = 'block'; 
             document.getElementById('error').style.display = 'none'; 
@@ -893,7 +893,7 @@ def api_search():
         
         user_email = session.get('user_email', 'Unknown')
         search_type = "imagen" if image_content and not query else "texto+imagen" if image_content and query else "texto"
-        print(f"🔍 OpenAI search request from {user_email}: {search_type}")
+        print(f"OpenAI search request from {user_email}: {search_type}")
         
         # Realizar búsqueda con soporte para imagen
         products = price_finder.search_products(query=query, image_content=image_content)
@@ -907,11 +907,11 @@ def api_search():
             'ai_powered': True
         }
         
-        print(f"✅ OpenAI search completed for {user_email}: {len(products)} products found")
+        print(f"OpenAI search completed for {user_email}: {len(products)} products found")
         return jsonify({'success': True, 'products': products, 'total': len(products)})
         
     except Exception as e:
-        print(f"❌ OpenAI search error: {e}")
+        print(f"OpenAI search error: {e}")
         try:
             query = request.form.get('query', 'producto') if request.form.get('query') else 'producto'
             fallback = price_finder._get_examples(query)
@@ -945,7 +945,7 @@ def results_page():
         ai_powered = search_data.get('ai_powered', False)
         
         products_html = ""
-        badges = ['🥇 MEJOR', '🥈 2do', '🥉 3ro', '4to', '5to', '6to']
+        badges = ['MEJOR', '2do', '3ro', '4to', '5to', '6to']
         colors = ['#4caf50', '#ff9800', '#9c27b0', '#2196f3', '#ff5722', '#607d8b']
         
         for i, product in enumerate(products[:6]):
@@ -958,13 +958,13 @@ def results_page():
             search_source_badge = ''
             source = product.get('search_source', '')
             if source == 'image':
-                search_source_badge = '<div style="position: absolute; top: 8px; left: 8px; background: #673ab7; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">🤖 IA VISION</div>'
+                search_source_badge = '<div style="position: absolute; top: 8px; left: 8px; background: #673ab7; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">IA VISION</div>'
             elif source == 'combined':
-                search_source_badge = '<div style="position: absolute; top: 8px; left: 8px; background: #607d8b; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">🔗 IA MIXTO</div>'
+                search_source_badge = '<div style="position: absolute; top: 8px; left: 8px; background: #607d8b; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">IA MIXTO</div>'
             elif source == 'openai_agent':
-                search_source_badge = '<div style="position: absolute; top: 8px; left: 8px; background: #00acc1; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">🤖 OPENAI</div>'
+                search_source_badge = '<div style="position: absolute; top: 8px; left: 8px; background: #00acc1; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">OPENAI</div>'
             elif source == 'example':
-                search_source_badge = '<div style="position: absolute; top: 8px; left: 8px; background: #ff7043; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">📋 EJEMPLO</div>'
+                search_source_badge = '<div style="position: absolute; top: 8px; left: 8px; background: #ff7043; color: white; padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">EJEMPLO</div>'
             
             title = html.escape(str(product.get('title', 'Producto')))
             price = html.escape(str(product.get('price', '$0.00')))
@@ -976,7 +976,7 @@ def results_page():
             # Información adicional del producto
             additional_info = ''
             if rating and reviews:
-                additional_info = f'<p style="color: #666; margin-bottom: 8px; font-size: 13px;">⭐ {rating} ({reviews} reseñas)</p>'
+                additional_info = f'<p style="color: #666; margin-bottom: 8px; font-size: 13px;">Rating: {rating} ({reviews} reseñas)</p>'
             
             products_html += '''
                 <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; background: white; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
@@ -984,9 +984,9 @@ def results_page():
                     ''' + search_source_badge + '''
                     <h3 style="color: #1a73e8; margin-bottom: 8px; font-size: 16px; margin-top: ''' + ('20px' if search_source_badge else '0') + ';">''' + title + '''</h3>
                     <div style="font-size: 28px; color: #2e7d32; font-weight: bold; margin: 12px 0;">''' + price + ''' <span style="font-size: 12px; color: #666;">USD</span></div>
-                    <p style="color: #666; margin-bottom: 8px; font-size: 14px;">🏪 Tienda: ''' + source_store + '''</p>
+                    <p style="color: #666; margin-bottom: 8px; font-size: 14px;">Tienda: ''' + source_store + '''</p>
                     ''' + additional_info + '''
-                    <a href="''' + link + '''" target="_blank" rel="noopener noreferrer" style="background: #1a73e8; color: white; padding: 10px 16px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 14px; transition: background 0.3s;">🛒 Ver Producto</a>
+                    <a href="''' + link + '''" target="_blank" rel="noopener noreferrer" style="background: #1a73e8; color: white; padding: 10px 16px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 14px; transition: background 0.3s;">Ver Producto</a>
                 </div>'''
         
         prices = [p.get('price_numeric', 0) for p in products if p.get('price_numeric', 0) > 0]
@@ -1022,11 +1022,11 @@ def results_page():
                 <span style="color: white; font-size: 14px;"><strong>''' + user_name_escaped + '''</strong></span>
                 <div style="margin-left: 15px;">
                     <a href="''' + url_for('auth_logout') + '''" style="background: rgba(220,53,69,0.9); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px; margin-right: 8px;">Salir</a>
-                    <a href="''' + url_for('search_page') + '''" style="background: rgba(40,167,69,0.9); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">🔍 Nueva Búsqueda</a>
+                    <a href="''' + url_for('search_page') + '''" style="background: rgba(40,167,69,0.9); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">Nueva Busqueda</a>
                 </div>
             </div>
             
-            <h1 style="color: white; text-align: center; margin-bottom: 8px;">🤖 Resultados: "''' + query + '''"</h1>
+            <h1 style="color: white; text-align: center; margin-bottom: 8px;">Resultados IA: "''' + query + '''"</h1>
             <p style="text-align: center; color: rgba(255,255,255,0.9); margin-bottom: 25px;">Powered by OpenAI Agent</p>
             
             ''' + stats + '''
@@ -1035,7 +1035,7 @@ def results_page():
         
         return render_template_string(render_page('Resultados IA - Price Finder USA', content))
     except Exception as e:
-        print(f"❌ Results page error: {e}")
+        print(f"Results page error: {e}")
         flash('Error al mostrar resultados.', 'danger')
         return redirect(url_for('search_page'))
 
@@ -1087,12 +1087,12 @@ def internal_error(error):
     return '<h1>500 - Error interno</h1><p><a href="/">Volver al inicio</a></p>', 500
 
 if __name__ == '__main__':
-    print("🚀 Price Finder USA con OpenAI Agent - Starting...")
-    print(f"🔐 Firebase: {'✅ OK' if os.environ.get('FIREBASE_WEB_API_KEY') else '❌ NOT_CONFIGURED'}")
-    print(f"🤖 OpenAI API: {'✅ OK' if OPENAI_READY else '❌ NOT_CONFIGURED'}")
-    print(f"👁️ OpenAI Vision: {'✅ OK' if OPENAI_READY and PIL_AVAILABLE else '❌ NOT_CONFIGURED'}")
-    print(f"🖼️ PIL/Pillow: {'✅ OK' if PIL_AVAILABLE else '❌ NOT_CONFIGURED'}")
-    print(f"🌐 Puerto: {os.environ.get('PORT', '5000')}")
+    print("Price Finder USA con OpenAI Agent - Starting...")
+    print(f"Firebase: {'OK' if os.environ.get('FIREBASE_WEB_API_KEY') else 'NOT_CONFIGURED'}")
+    print(f"OpenAI API: {'OK' if OPENAI_READY else 'NOT_CONFIGURED'}")
+    print(f"OpenAI Vision: {'OK' if OPENAI_READY and PIL_AVAILABLE else 'NOT_CONFIGURED'}")
+    print(f"PIL/Pillow: {'OK' if PIL_AVAILABLE else 'NOT_CONFIGURED'}")
+    print(f"Puerto: {os.environ.get('PORT', '5000')}")
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=False, threaded=True)
 else:
     import logging
